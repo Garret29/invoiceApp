@@ -1,0 +1,13 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="app.js"></script>
+</head>
+<body ng-app="invoiceApp" ng-controller="controller" ng-init="lol='xD'">
+<div style="background-color: aqua" ng-click="lol=lol+'D'">
+    <input ng-model="invoice.invoiceCity"><br><br>
+    <input ng-model="invoice.invoiceDate">
+    <div ng-bind="lol"></div>
+</div>
+</body>
+</html>
