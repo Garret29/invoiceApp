@@ -4,9 +4,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="app.js"></script>
 </head>
-<body ng-app="invoiceApp" ng-controller="controller" ng-init="style='00FFFF';text='zmień ten napis'" >
+<body ng-app="invoiceApp" ng-style="{'background-color':style}" ng-controller="controller" ng-init="style='00FFFF';text='zmień ten napis'" >
 <input type="text" ng-model="text" ng-change="style=getRandomColor()"/>
-<div  ng-style="{'background-color':style}"><br><br><br><br>
+<div>
     <h1 ng-bind="text"></h1><br>
 </div>
 </body>
