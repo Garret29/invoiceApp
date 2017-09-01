@@ -1,13 +1,13 @@
 <html>
 <head>
+    <meta charset="UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="app.js"></script>
 </head>
-<body ng-app="invoiceApp" ng-controller="controller" ng-init="lol='xD'">
-<div style="background-color: aqua" ng-click="lol=lol+'D'">
-    <input ng-model="invoice.invoiceCity"><br><br>
-    <input ng-model="invoice.invoiceDate">
-    <div ng-bind="lol"></div>
+<body ng-app="invoiceApp" ng-controller="controller" ng-init="style='00FFFF';text='zmień ten napis'" >
+<input type="text" ng-model="text" ng-change="style=getRandomColor()"/>
+<div  ng-style="{'background-color':style}"><br><br><br><br>
+    <h1 ng-bind="text"></h1><br>
 </div>
 </body>
 </html>
