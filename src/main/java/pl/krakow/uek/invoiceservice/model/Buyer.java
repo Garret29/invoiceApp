@@ -14,17 +14,17 @@ public class Buyer implements Serializable {
     @Element(name = "dom")
     private String buyerHouse;
     @Element(name = "lokal")
-    private String buyerAppartment;
+    private String buyerApartment;
     @Element(name = "miasto")
     private String buyerCity;
     @Element(name = "kod")
     private String buyerPostalCode;
 
-    public Buyer(String buyerName, String buyerStreet, String buyerHouse, String buyerAppartment, String buyerCity, String buyerPostalCode) {
+    public Buyer(String buyerName, String buyerStreet, String buyerHouse, String buyerApartment, String buyerCity, String buyerPostalCode) {
         this.buyerName = buyerName;
         this.buyerStreet = buyerStreet;
         this.buyerHouse = buyerHouse;
-        this.buyerAppartment = buyerAppartment;
+        this.buyerApartment = buyerApartment;
         this.buyerCity = buyerCity;
         this.buyerPostalCode = buyerPostalCode;
     }
@@ -56,12 +56,12 @@ public class Buyer implements Serializable {
         this.buyerHouse = buyerHouse;
     }
 
-    public String getBuyerAppartment() {
-        return buyerAppartment;
+    public String getBuyerApartment() {
+        return buyerApartment;
     }
 
-    public void setBuyerAppartment(String buyerAppartment) {
-        this.buyerAppartment = buyerAppartment;
+    public void setBuyerApartment(String buyerApartment) {
+        this.buyerApartment = buyerApartment;
     }
 
     public String getBuyerCity() {

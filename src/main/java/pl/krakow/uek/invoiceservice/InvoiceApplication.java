@@ -28,34 +28,6 @@ public class InvoiceApplication {
         return args -> {
             File cacheDir = new File(pdfGenerationProperties.getCacheDirPath());
             cacheDir.mkdirs();
-
-            Invoice invoice = new Invoice(
-                    " ",
-                    " ",
-                    " ",
-                    " ",
-                    " ",
-                    " ",
-                    new Provider(" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "),
-                    new Buyer(" ", " ", " ", " ", " ", " "),
-                    new ArrayList<>(),
-                    0.0,
-                    0.0,
-                    0.0,
-                    " ",
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-
-            invoice.addGood(new Good(" ", 0.0, " ", 0.0, 0.0, 0));
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            File xml = new File(cacheDir, "xmlToExport.json");
-            objectMapper.writeValue(xml, invoice);
-
         };
     }
 }

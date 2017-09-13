@@ -190,11 +190,11 @@
                         </th>
                         <th align="center">Cena jedn.
                             <br />
-                            gross po rabacie
+                            brutto po rabacie
                             <br />
                             [zł]
                         </th>
-                        <th align="center">Wartość gross
+                        <th align="center">Wartość brutto
                             <br />
                             [zł]
                         </th>
