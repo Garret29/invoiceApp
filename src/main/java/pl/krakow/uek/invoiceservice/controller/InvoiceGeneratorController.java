@@ -20,19 +20,32 @@ import java.io.FileNotFoundException;
 public class InvoiceGeneratorController {
 
     private final PDFGenerationService pdfGenerationService;
+    private final PDFGenerationProperties pdfGenerationProperties;
 
     @Autowired
-    public InvoiceGeneratorController(PDFGenerationService pdfGenerationService) {
+    public InvoiceGeneratorController(PDFGenerationService pdfGenerationService, PDFGenerationProperties pdfGenerationProperties) {
         this.pdfGenerationService = pdfGenerationService;
+        this.pdfGenerationProperties = pdfGenerationProperties;
     }
 
 
     @PostMapping(value = "api")
-    public ResponseEntity<InputStreamResource> getPDFInvoice(@RequestBody Invoice invoice) throws FileNotFoundException {
+    public ResponseEntity<?> postPDFInvoice(@RequestBody Invoice invoice) throws FileNotFoundException {
+
 
         invoice.getGoods().forEach(Good::doCalculations);
         invoice.doCalculations();
         File pdf = pdfGenerationService.createInvoicePDF(invoice);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "api")
+    public ResponseEntity<InputStreamResource> getPDFInvoice(@RequestParam String name) throws FileNotFoundException {
+
+
+        File pdf = new File(pdfGenerationProperties.getCacheDirPath(), name);
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");

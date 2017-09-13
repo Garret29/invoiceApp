@@ -20,6 +20,7 @@ public class Invoice implements Serializable {
     private String paymentDate;
     @Element(name = "sposob_platnosci")
     private String paymentMethod;
+
     @Element(name = "id")
     private String id;
 

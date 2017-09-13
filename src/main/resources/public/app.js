@@ -1,8 +1,11 @@
 const app = angular.module('invoiceApp', []);
 
-app.controller('controller', function ($scope) {
+app.controller('controller', function ($scope, $window, $http, $location) {
 
-    $scope.id=null;
+    $scope.id = null;
+    $scope.docUrl=null;
+    $scope.url = $location.absUrl();
+
 
     $scope.invoice =
         {
@@ -66,14 +69,31 @@ app.controller('controller', function ($scope) {
         };
 
     $scope.getPdfInvoice = function () {
+        /*
+
         $.ajax({
             url: "http://localhost:8080/api",
             method: "post",
             contentType: "application/json; charset=utf-8",
             dataType: "JSON",
-            data:JSON.stringify($scope.invoice)
+            data: JSON.stringify($scope.invoice),
+            success: function () {
+                alert("hello")
+            }
         });
-        console.log(JSON.stringify($scope.invoice))
+        */
+
+        $http({
+            url: $scope.url+"/api",
+            dataType: "json",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify($scope.invoice)
+        }).then(function (response) {
+            $scope.docUrl=$scope.url+"/api?name="+$scope.invoice.id+".pdf"
+        })
     };
 
     $scope.loadFromDB = function () {
