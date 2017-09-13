@@ -79,9 +79,8 @@ app.controller('controller', function ($scope) {
     $scope.loadFromDB = function () {
         $.ajax({
             url: "",
-            method: "get",
-            contentType: "application/json",
-            dataType:"JSON",
+            method: "post",
+            contentType: "text/plain",
             data: $scope.id
         })
     };

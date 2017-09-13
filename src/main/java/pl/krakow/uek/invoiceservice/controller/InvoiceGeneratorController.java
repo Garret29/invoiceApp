@@ -20,12 +20,10 @@ import java.io.FileNotFoundException;
 public class InvoiceGeneratorController {
 
     private final PDFGenerationService pdfGenerationService;
-    private final PDFGenerationProperties pdfGenerationProperties;
 
     @Autowired
-    public InvoiceGeneratorController(PDFGenerationService pdfGenerationService, PDFGenerationProperties pdfGenerationProperties) {
+    public InvoiceGeneratorController(PDFGenerationService pdfGenerationService) {
         this.pdfGenerationService = pdfGenerationService;
-        this.pdfGenerationProperties = pdfGenerationProperties;
     }
 
 

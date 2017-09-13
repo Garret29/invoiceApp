@@ -17,6 +17,11 @@
         width: 200px;
     }
 
+    #infoL-label-req{
+        color: crimson;
+        font-weight: bold;
+    }
+
     .info-label {
         font-weight: bold;
         padding: 0;
@@ -63,7 +68,7 @@
         <label for="paymentMethodInput">Sposób zapłaty:</label>
         <input id="paymentMethodInput" ng-model="invoice.paymentMethod">
         <br>
-        <label for="idInput">Numer identyfikacyjny:</label>
+        <label for="idInput">Numer identyfikacyjny*:</label>
         <input id="idInput" ng-model="invoice.id">
         <br>
     </div>
@@ -96,7 +101,7 @@
         <br>
         <label for="providerBankInput">Nazwa banku:</label>
         <input id="providerBankInput" ng-model="invoice.provider.providerBank">
-        <br>
+        <br><p id="infoL-label-req">* - pola wymagane</p>
     </div>
     <div class="col-sm-4" id="col3">
         <label class="info-label">Dane kupującego:</label><br>
@@ -127,12 +132,12 @@
         <table class="table table-hover">
             <thead>
             <tr>
-                <th>Nazwa</th>
-                <th>Ilość</th>
-                <th>Jednostka</th>
-                <th>Cena netto za jednostkę</th>
-                <th>Rabat[%]</th>
-                <th>Stawka VAT</th>
+                <th>Nazwa*</th>
+                <th>Ilość*</th>
+                <th>Jednostka*</th>
+                <th>Cena netto za jednostkę*</th>
+                <th>Rabat[%]*</th>
+                <th>Stawka VAT*</th>
             </tr>
             </thead>
             <tbody>
