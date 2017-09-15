@@ -190,7 +190,7 @@
                         </th>
                         <th align="center">Cena jedn.
                             <br />
-                            brutto po rabacie
+                            netto po rabacie
                             <br />
                             [zł]
                         </th>

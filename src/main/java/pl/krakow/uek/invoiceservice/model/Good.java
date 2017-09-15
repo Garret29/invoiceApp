@@ -47,6 +47,7 @@ public class Good implements Serializable {
         vat = Math.round(vat*100.0)/100.0;
         priceGross = priceNetto + vat;
         priceGross = Math.round(priceGross*100.0)/100.0;
+        priceNetto = Math.round(priceNetto*100.0)/100.0;
     }
 
     public String getName() {
