@@ -38,11 +38,22 @@ public class InvoiceGeneratorController {
         InputStreamResource pdf = pdfGenerationService.createInvoicePDFStream(invoice);
 
         storageService.saveFile(pdf.hashCode(), pdf);
+        storageService.addInvoice(pdf.hashCode(), invoice);
 
         return ResponseEntity.ok().body(pdf.hashCode());
     }
 
-    @GetMapping(value = "/files/{key}")
+    @GetMapping(value = "api/keys")
+    public ResponseEntity<Invoice> getInvoice(@RequestParam int key){
+
+        Invoice invoice = storageService.getInvoice(key);
+
+        return ResponseEntity
+                .ok()
+                .body(invoice);
+    }
+
+    @GetMapping(value = "files/{key}")
     public ResponseEntity<InputStreamResource> getPDFInvoice(@PathVariable int key) {
 
         HttpHeaders headers = new HttpHeaders();
@@ -51,10 +62,12 @@ public class InvoiceGeneratorController {
         headers.add("Expires", "0");
         headers.add("Content-Disposition", "attachment; filename="+ key + ".pdf");
 
+        InputStreamResource pdf = storageService.getFile(key);
+
         return ResponseEntity
                 .ok()
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_PDF)
-                .body(storageService.getFile(key));
+                .body(pdf);
     }
 }

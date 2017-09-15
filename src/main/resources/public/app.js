@@ -3,9 +3,9 @@ const app = angular.module('invoiceApp', []);
 app.controller('controller', function ($scope, $window, $http, $location) {
 
     $scope.id = null;
-    $scope.docUrl=null;
+    $scope.docUrl = null;
     $scope.url = $location.absUrl();
-
+    $scope.userId = null;
 
     $scope.invoice =
         {
@@ -39,14 +39,14 @@ app.controller('controller', function ($scope, $window, $http, $location) {
             "goods": [
                 {
                     "name": "",
-                    "quantity": 0.0,
+                    "quantity": null,
                     "unit": "",
-                    "priceNetOfUnit": 0.0,
-                    "discount": 0.0,
+                    "priceNetOfUnit": null,
+                    "discount": null,
                     "priceNetOfUnitAfterDiscount": 0.0,
                     "priceNetto": 0.0,
                     "priceGross": 0.0,
-                    "vatRate": 0,
+                    "vatRate": null,
                     "vat": 0.0
                 }
             ],
@@ -69,22 +69,9 @@ app.controller('controller', function ($scope, $window, $http, $location) {
         };
 
     $scope.getPdfInvoice = function () {
-        /*
-
-        $.ajax({
-            url: "http://localhost:8080/api",
-            method: "post",
-            contentType: "application/json; charset=utf-8",
-            dataType: "JSON",
-            data: JSON.stringify($scope.invoice),
-            success: function () {
-                alert("hello")
-            }
-        });
-        */
 
         $http({
-            url: $scope.url+"/api",
+            url: $scope.url + "/api",
             dataType: "json",
             method: "POST",
             headers: {
@@ -92,17 +79,19 @@ app.controller('controller', function ($scope, $window, $http, $location) {
             },
             data: JSON.stringify($scope.invoice)
         }).then(function (response) {
-
-             $scope.docUrl=$scope.url+"/files/"+response.data;
+            $scope.id = response.data;
+            $scope.docUrl = $scope.url + "/files/" + response.data;
         })
     };
 
     $scope.loadFromDB = function () {
-        $.ajax({
-            url: "",
-            method: "post",
-            contentType: "text/plain",
-            data: $scope.id
+        $http(
+            {
+                url: $scope.url + "/api/keys?key="+$scope.userId,
+                method: "GET"
+            }
+        ).then(function (response) {
+            $scope.invoice=response.data;
         })
     };
 
@@ -123,7 +112,22 @@ app.controller('controller', function ($scope, $window, $http, $location) {
 
     $scope.removeGood = function (index) {
         $scope.invoice.goods.splice(index, 1)
-    }
+    };
 
+    $scope.updateFromApi = function () {
+
+        $http({
+            method: "GET",
+            url: "https://api-v3.mojepanstwo.pl/dane/krs_podmioty.json?conditions[krs_podmioty.nip]=" + $scope.invoice.provider.providerNIP
+        }).then(function (response) {
+            const json = response.data.Dataobject[0].data;
+            $scope.invoice.provider.providerApartment = json["krs_podmioty.adres_lokal"];
+            $scope.invoice.provider.providerStreet = json["krs_podmioty.adres_ulica"];
+            $scope.invoice.provider.providerCity = json["krs_podmioty.adres_miejscowosc"];
+            $scope.invoice.provider.providerName = json["krs_podmioty.nazwa"];
+            $scope.invoice.provider.providerHouse = json["krs_podmioty.adres_numer"];
+            $scope.invoice.provider.providerPostalCode = json["krs_podmioty.adres_kod_pocztowy"];
+        })
+    }
 
 });
