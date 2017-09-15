@@ -144,6 +144,12 @@ public class Invoice implements Serializable {
         gross_8 = net_8 + vat_8;
         gross_23 = net_23 + vat_23;
 
+        gross = Math.round(gross * 100.0) / 100.0;
+        gross_0 = Math.round(gross_0 * 100.0) / 100.0;
+        gross_5 = Math.round(gross_5 * 100.0) / 100.0;
+        gross_8 = Math.round(gross_8 * 100.0) / 100.0;
+        gross_23 = Math.round(gross_23 * 100.0) / 100.0;
+
     }
 
     public double getNet_0() {

@@ -180,7 +180,7 @@
                         <th align="center">J.m.</th>
                         <th align="center">Cena jedn.
                             <br />
-                            gross
+                            brutto
                             <br />
                             [zł]
                         </th>
