@@ -9,52 +9,52 @@ import org.springframework.web.bind.annotation.*;
 import pl.krakow.uek.invoiceservice.model.Good;
 import pl.krakow.uek.invoiceservice.model.Invoice;
 import pl.krakow.uek.invoiceservice.service.PDFGenerationService;
+import pl.krakow.uek.invoiceservice.service.StorageService;
 import pl.krakow.uek.invoiceservice.service.properties.PDFGenerationProperties;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.util.HashMap;
 
 @RequestMapping(value = "/")
 @RestController
 public class InvoiceGeneratorController {
 
     private final PDFGenerationService pdfGenerationService;
+    private final StorageService storageService;
     private final PDFGenerationProperties pdfGenerationProperties;
 
     @Autowired
-    public InvoiceGeneratorController(PDFGenerationService pdfGenerationService, PDFGenerationProperties pdfGenerationProperties) {
+    public InvoiceGeneratorController(PDFGenerationService pdfGenerationService, PDFGenerationProperties pdfGenerationProperties, HashMap<Integer, InputStreamResource> pdfs, StorageService storageService) {
         this.pdfGenerationService = pdfGenerationService;
         this.pdfGenerationProperties = pdfGenerationProperties;
+        this.storageService = storageService;
     }
 
 
     @PostMapping(value = "api")
-    public ResponseEntity<?> postPDFInvoice(@RequestBody Invoice invoice) throws FileNotFoundException {
-
+    public ResponseEntity<?> postPDFInvoice(@RequestBody Invoice invoice) {
 
         invoice.getGoods().forEach(Good::doCalculations);
         invoice.doCalculations();
-        File pdf = pdfGenerationService.createInvoicePDF(invoice);
+        InputStreamResource pdf = pdfGenerationService.createInvoicePDFStream(invoice);
 
-        return ResponseEntity.ok().build();
+        storageService.saveFile(pdf.hashCode(), pdf);
+
+        return ResponseEntity.ok().body(pdf.hashCode());
     }
 
-    @GetMapping(value = "api")
-    public ResponseEntity<InputStreamResource> getPDFInvoice(@RequestParam String name) throws FileNotFoundException {
-
-
-        File pdf = new File(pdfGenerationProperties.getCacheDirPath(), name);
+    @GetMapping(value = "/files/{key}")
+    public ResponseEntity<InputStreamResource> getPDFInvoice(@PathVariable int key) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
+        headers.add("Content-Disposition", "attachment; filename="+ key + ".pdf");
 
         return ResponseEntity
                 .ok()
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_PDF)
-                .body(new InputStreamResource(new FileInputStream(pdf)));
+                .body(storageService.getFile(key));
     }
 }

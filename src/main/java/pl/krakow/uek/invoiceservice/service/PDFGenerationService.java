@@ -3,6 +3,7 @@ package pl.krakow.uek.invoiceservice.service;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import pl.krakow.uek.invoiceservice.model.Invoice;
@@ -10,8 +11,7 @@ import pl.krakow.uek.invoiceservice.service.properties.PDFGenerationProperties;
 import pl.krakow.uek.invoiceservice.util.PDFGenerator;
 import pl.krakow.uek.invoiceservice.util.XMLSerializer;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 @Service
 public class PDFGenerationService{
@@ -30,7 +30,7 @@ public class PDFGenerationService{
     }
 
 
-    public File createInvoicePDF(Invoice invoice) {
+    public File createInvoicePDFFile(Invoice invoice) {
         cacheDir = new File(pdfGenerationProperties.getCacheDirPath());
 
         File xml = new File(cacheDir, invoice.getId() + ".xml");
@@ -43,5 +43,20 @@ public class PDFGenerationService{
         }
 
         return pdf;
+    }
+
+    public InputStreamResource createInvoicePDFStream(Invoice invoice){
+        ByteArrayOutputStream xmlOs = new ByteArrayOutputStream();
+        xmlSerializer.serialize(xmlOs, invoice);
+        ByteArrayInputStream xmlIs;
+        InputStreamResource pdfStream=null;
+        try {
+            xmlIs = new ByteArrayInputStream(xmlOs.toByteArray());
+            pdfStream = pdfGenerator.generatePDF(style.getInputStream(), xmlIs, invoice.getId()+".pdf");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return pdfStream;
     }
 }

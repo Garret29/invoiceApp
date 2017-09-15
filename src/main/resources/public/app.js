@@ -92,7 +92,8 @@ app.controller('controller', function ($scope, $window, $http, $location) {
             },
             data: JSON.stringify($scope.invoice)
         }).then(function (response) {
-            $scope.docUrl=$scope.url+"/api?name="+$scope.invoice.id+".pdf"
+
+             $scope.docUrl=$scope.url+"/files/"+response.data;
         })
     };
 
