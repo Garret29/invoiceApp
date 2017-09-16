@@ -54,7 +54,8 @@
     </div>
     <div class="text-right">
         <input ng-model="userId" type="number" placeholder="ID">
-        <button class="btn" ng-click="loadFromDB()" ng-disabled="userId==null || userId==''">Wczytaj dane z bazy</button>
+        <button class="btn" ng-click="loadFromDB()" ng-disabled="userId==null || userId==''">Wczytaj dane z bazy
+        </button>
     </div>
 </div>
 
@@ -83,7 +84,7 @@
     <div class="col-sm-4" id="col2">
         <label class="info-label">Dane dostawcy:</label> <br>
         <label for="providerNIPInput">NIP/PESEL:</label>
-        <input id="providerNIPInput" ng-model="invoice.provider.providerNIP">
+        <input id="providerNIPInput" type="number" ng-model="invoice.provider.providerNIP">
         <button class="btn btn-default" ng-click="updateFromApi()">Wczytaj dane z API</button>
         <br>
         <label for="providerNameInput">Nazwa dostawcy:</label>
@@ -105,7 +106,7 @@
         <input id="providerPostalCodeInput" ng-model="invoice.provider.providerPostalCode">
         <br>
         <label for="providerBankNumberInput">Nr rachunku:</label>
-        <input id="providerBankNumberInput" ng-model="invoice.provider.providerBankNumber">
+        <input id="providerBankNumberInput" type="number" ng-model="invoice.provider.providerBankNumber">
         <br>
         <label for="providerBankInput">Nazwa banku:</label>
         <input id="providerBankInput" ng-model="invoice.provider.providerBank">
@@ -139,9 +140,8 @@
             <button class="btn btn-primary" ng-disabled="invoiceForm.$invalid" ng-click="getPdfInvoice()">Pobierz link
                 do dokumentu
             </button>
-            <!--<button class="btn btn-default" ng-click="">Zapisz fakturę w bazie danych</button>-->
             <br>
-            <a href="{{docUrl}}" ng-bind="docUrl"></a>
+            <a href="{{docUrl}}" ng-bind="docUrl" ng-click="showLink=false" ng-show="showLink"></a>
             <br>
         </div>
         <div class="row-sm-4">

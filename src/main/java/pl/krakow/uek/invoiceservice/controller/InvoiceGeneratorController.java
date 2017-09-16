@@ -18,6 +18,7 @@ import pl.krakow.uek.invoiceservice.service.StorageService;
 import pl.krakow.uek.invoiceservice.service.properties.PDFGenerationProperties;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 @RequestMapping(value = "/")
@@ -41,7 +42,7 @@ public class InvoiceGeneratorController {
 
         invoice.getGoods().forEach(Good::doCalculations);
         invoice.doCalculations();
-        InputStreamResource pdf = pdfGenerationService.createInvoicePDFStream(invoice);
+        InputStream pdf = pdfGenerationService.createInvoicePDFStream(invoice);
 
         ObjectMapper objectMapper = new ObjectMapper();
         InvoiceJsonData invoiceJsonData = null;
@@ -73,7 +74,7 @@ public class InvoiceGeneratorController {
         try {
             invoice = mapper.readValue(invoiceJsonData.getData(), Invoice.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            return ResponseEntity.status(500).build();
         }
 
         return ResponseEntity
@@ -84,18 +85,18 @@ public class InvoiceGeneratorController {
     @GetMapping(value = "files/{key}")
     public ResponseEntity<?> getPDFInvoice(@PathVariable int key) {
 
+        if (!storageService.getPdfFiles().containsKey(key)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        InputStreamResource pdf = new InputStreamResource(storageService.getFile(key));
+        storageService.deleteFile(key);
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
         headers.add("Content-Disposition", "attachment; filename=" + key + ".pdf");
-
-        if (!storageService.getPdfFiles().containsKey(key)) {
-            return ResponseEntity.notFound().build();
-        }
-
-        InputStreamResource pdf = storageService.getFile(key);
-        storageService.deleteFile(key);
 
         return ResponseEntity
                 .ok()

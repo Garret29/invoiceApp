@@ -7,6 +7,7 @@ app.controller('controller', function ($scope, $window, $http, $location) {
     $scope.url = $location.absUrl();
     $scope.userId = null;
     $scope.save = false;
+    $scope.showLink = false;
 
     $scope.invoice =
         {
@@ -70,7 +71,6 @@ app.controller('controller', function ($scope, $window, $http, $location) {
         };
 
     $scope.getPdfInvoice = function () {
-
         $http({
             url: $scope.url + "/api?save="+$scope.save,
             dataType: "json",
@@ -81,7 +81,8 @@ app.controller('controller', function ($scope, $window, $http, $location) {
             data: JSON.stringify($scope.invoice)
         }).then(function (response) {
             $scope.id = response.data;
-            $scope.docUrl = $scope.url + "/files/" + response.data;
+            $scope.docUrl = $scope.url + "files/" + response.data;
+            $scope.showLink = true;
         })
     };
 

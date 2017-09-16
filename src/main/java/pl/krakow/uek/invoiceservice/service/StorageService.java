@@ -6,17 +6,18 @@ import org.springframework.stereotype.Service;
 import pl.krakow.uek.invoiceservice.model.InvoiceJsonData;
 import pl.krakow.uek.invoiceservice.repository.InvoicesRepository;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class StorageService {
-    private final HashMap<Integer, InputStreamResource> pdfFiles;
+    private final HashMap<Integer, InputStream> pdfFiles;
     private final InvoicesRepository invoicesRepository;
     private AtomicInteger atomicInteger;
 
     @Autowired
-    public StorageService(HashMap<Integer, InputStreamResource> pdfFiles, InvoicesRepository invoicesRepository, AtomicInteger atomicInteger) {
+    public StorageService(HashMap<Integer, InputStream> pdfFiles, InvoicesRepository invoicesRepository, AtomicInteger atomicInteger) {
         this.pdfFiles = pdfFiles;
         this.invoicesRepository = invoicesRepository;
         this.atomicInteger = atomicInteger;
@@ -26,11 +27,11 @@ public class StorageService {
         pdfFiles.remove(key);
     }
 
-    public void saveFile(int key, InputStreamResource file){
+    public void saveFile(int key, InputStream file){
             pdfFiles.put(key,file);
     }
 
-    public InputStreamResource getFile(int key){
+    public InputStream getFile(int key){
         return pdfFiles.get(key);
     }
 
@@ -50,7 +51,7 @@ public class StorageService {
         return atomicInteger;
     }
 
-    public HashMap<Integer, InputStreamResource> getPdfFiles() {
+    public HashMap<Integer, InputStream> getPdfFiles() {
         return pdfFiles;
     }
 

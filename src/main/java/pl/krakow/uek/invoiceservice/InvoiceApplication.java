@@ -18,8 +18,7 @@ public class InvoiceApplication {
     @Bean
     public CommandLineRunner commandLineRunner(PDFGenerationProperties pdfGenerationProperties) {
         return args -> {
-//            File cacheDir = new File(pdfGenerationProperties.getCacheDirPath());
-//            cacheDir.mkdirs();
+
         };
     }
 }

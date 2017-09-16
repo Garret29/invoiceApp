@@ -3,7 +3,9 @@ package pl.krakow.uek.invoiceservice.util;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.FontProvider;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.XMLWorkerFontProvider;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.context.annotation.Scope;
@@ -18,11 +20,12 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.List;
 
 @Component
 @Scope("prototype")
 public class PDFGenerator {
-    public File generatePDF(File xsl, File xml, File dir, String filename, File cacheDir) {
+    public File generatePDF(File xsl, File xml, File dir, String filename, File cacheDir, List<String> fonts) {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
@@ -50,11 +53,21 @@ public class PDFGenerator {
             OutputStream os = new FileOutputStream(pdf);
             Document document = new Document();
             PdfWriter pdfWriter = PdfWriter.getInstance(document, os);
-            document.open();
-            XMLWorkerHelper.getInstance().parseXHtml(pdfWriter, document, htmlIs, Charset.forName("UTF-8"));
-            document.close();
-            os.close();
-            htmlIs.close();
+            if (!fonts.isEmpty()) {
+                XMLWorkerFontProvider fontProvider = new XMLWorkerFontProvider(XMLWorkerFontProvider.DONTLOOKFORFONTS);
+                fonts.forEach(fontProvider::register);
+                document.open();
+                XMLWorkerHelper.getInstance().parseXHtml(pdfWriter, document, htmlIs, Charset.forName("UTF-8"), fontProvider);
+                document.close();
+                os.close();
+                htmlIs.close();
+            } else {
+                document.open();
+                XMLWorkerHelper.getInstance().parseXHtml(pdfWriter, document, htmlIs, Charset.forName("UTF-8"));
+                document.close();
+                os.close();
+                htmlIs.close();
+            }
         } catch (DocumentException | IOException | TransformerException e) {
             e.printStackTrace();
         }
@@ -62,9 +75,9 @@ public class PDFGenerator {
         return pdf;
     }
 
-    public InputStreamResource generatePDF(InputStream xsl, InputStream xml, String filename) {
+    public InputStream generatePDF(InputStream xsl, InputStream xml) {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        InputStreamResource pdf = null;
+        ByteArrayOutputStream pdfOs=null;
 
         try {
             Transformer transformer = transformerFactory.newTransformer(new StreamSource(xsl));
@@ -83,7 +96,7 @@ public class PDFGenerator {
             tidy.parseDOM(htmlIs, html2Os);
             htmlIs.close();
             htmlIs = new ByteArrayInputStream(html2Os.toByteArray());
-            ByteArrayOutputStream pdfOs = new ByteArrayOutputStream();
+            pdfOs = new ByteArrayOutputStream();
             Document document = new Document();
             PdfWriter pdfWriter = PdfWriter.getInstance(document, pdfOs);
             document.open();
@@ -92,11 +105,10 @@ public class PDFGenerator {
             pdfOs.close();
             htmlIs.close();
 
-            pdf = new InputStreamResource(new ByteArrayInputStream(pdfOs.toByteArray()));
         } catch (TransformerException | IOException | DocumentException e) {
             e.printStackTrace();
         }
 
-        return pdf;
+        return new ByteArrayInputStream(pdfOs.toByteArray());
     }
 }
