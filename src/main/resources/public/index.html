@@ -54,7 +54,7 @@
     </div>
     <div class="text-right">
         <input ng-model="userId" type="number" placeholder="ID">
-        <button class="btn" ng-click="loadFromDB()" ng-disabled="userId==null || userId==''">Wczytaj dane z bazy
+        <button class="btn btn-default" ng-click="loadFromDB()" ng-disabled="userId==null || userId==''">Wczytaj dane z bazy
         </button>
     </div>
 </div>
@@ -106,7 +106,7 @@
         <input id="providerPostalCodeInput" ng-model="invoice.provider.providerPostalCode">
         <br>
         <label for="providerBankNumberInput">Nr rachunku:</label>
-        <input id="providerBankNumberInput" type="number" ng-model="invoice.provider.providerBankNumber">
+        <input id="providerBankNumberInput" type="number" min="0" maxlength="26" ng-model="invoice.provider.providerBankNumber">
         <br>
         <label for="providerBankInput">Nazwa banku:</label>
         <input id="providerBankInput" ng-model="invoice.provider.providerBank">
@@ -159,10 +159,10 @@
                 <tbody>
                 <tr ng-repeat="good in invoice.goods">
                     <td><input ng-model="good.name" required/></td>
-                    <td><input type="number" ng-model="good.quantity" required/></td>
+                    <td><input type="number" ng-model="good.quantity" step="0.01" min="0" required/></td>
                     <td><input ng-model="good.unit" required/></td>
-                    <td><input type="number" ng-model="good.priceNetOfUnit" required/></td>
-                    <td><input type="number" ng-model="good.discount" required/></td>
+                    <td><input type="number" ng-model="good.priceNetOfUnit" step="0.01" min="0" required/></td>
+                    <td><input type="number" ng-model="good.discount" step="0.01" min="0" required/></td>
                     <td>
                         <select data-ng-model="good.vatRate" required>
                             <option>0</option>
