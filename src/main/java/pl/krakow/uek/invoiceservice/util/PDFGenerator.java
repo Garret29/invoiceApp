@@ -75,7 +75,7 @@ public class PDFGenerator {
         return pdf;
     }
 
-    public InputStream generatePDF(InputStream xsl, InputStream xml) {
+    public InputStream generatePDF(InputStream xsl, InputStream xml, List<String> fonts) {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         ByteArrayOutputStream pdfOs=null;
 
@@ -99,8 +99,10 @@ public class PDFGenerator {
             pdfOs = new ByteArrayOutputStream();
             Document document = new Document();
             PdfWriter pdfWriter = PdfWriter.getInstance(document, pdfOs);
+            XMLWorkerFontProvider fontProvider = new XMLWorkerFontProvider(XMLWorkerFontProvider.DONTLOOKFORFONTS);
+            fonts.forEach(fontProvider::register);
             document.open();
-            XMLWorkerHelper.getInstance().parseXHtml(pdfWriter, document, htmlIs, Charset.forName("UTF-8"));
+            XMLWorkerHelper.getInstance().parseXHtml(pdfWriter, document, htmlIs, Charset.forName("UTF-8"), fontProvider);
             document.close();
             pdfOs.close();
             htmlIs.close();

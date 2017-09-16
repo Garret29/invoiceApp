@@ -11,7 +11,7 @@
             <head>
                 <meta charset="UTF-8" />
             </head>
-            <body style="font-family:Arial">
+            <body style="font-family:Liberation Sans">
                 <xsl:for-each select="faktura">
                     <p align="right">
                         <xsl:if test="miejscowosc_wystawienia !='' ">

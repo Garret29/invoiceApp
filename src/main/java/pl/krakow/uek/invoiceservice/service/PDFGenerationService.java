@@ -77,7 +77,7 @@ public class PDFGenerationService {
         InputStream pdfStream = null;
         try {
             xmlIs = new ByteArrayInputStream(xmlOs.toByteArray());
-            pdfStream = pdfGenerator.generatePDF(style.getInputStream(), xmlIs);
+            pdfStream = pdfGenerator.generatePDF(style.getInputStream(), xmlIs, fonts);
         } catch (IOException e) {
             e.printStackTrace();
         }
