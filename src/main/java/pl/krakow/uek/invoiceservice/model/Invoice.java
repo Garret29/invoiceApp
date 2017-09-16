@@ -4,9 +4,9 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import javax.persistence.Entity;
 import java.io.Serializable;
 import java.util.List;
-
 @Root(name = "faktura")
 public class Invoice implements Serializable {
 

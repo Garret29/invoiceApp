@@ -1,5 +1,9 @@
 package pl.krakow.uek.invoiceservice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.internal.parser.JSONParser;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -8,10 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.krakow.uek.invoiceservice.model.Good;
 import pl.krakow.uek.invoiceservice.model.Invoice;
+import pl.krakow.uek.invoiceservice.model.InvoiceJsonData;
 import pl.krakow.uek.invoiceservice.service.PDFGenerationService;
 import pl.krakow.uek.invoiceservice.service.StorageService;
 import pl.krakow.uek.invoiceservice.service.properties.PDFGenerationProperties;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 @RequestMapping(value = "/")
@@ -31,22 +37,44 @@ public class InvoiceGeneratorController {
 
 
     @PostMapping(value = "api")
-    public ResponseEntity<?> postPDFInvoice(@RequestBody Invoice invoice) {
+    public ResponseEntity<?> postPDFInvoice(@RequestBody Invoice invoice, @RequestParam(defaultValue = "false") boolean save) {
 
         invoice.getGoods().forEach(Good::doCalculations);
         invoice.doCalculations();
         InputStreamResource pdf = pdfGenerationService.createInvoicePDFStream(invoice);
 
-        storageService.saveFile(pdf.hashCode(), pdf);
-        storageService.addInvoice(pdf.hashCode(), invoice);
+        ObjectMapper objectMapper = new ObjectMapper();
+        InvoiceJsonData invoiceJsonData = null;
+        int counter = storageService.getAtomicInteger().incrementAndGet();
+        if (save) {
+            try {
+                invoiceJsonData = new InvoiceJsonData(objectMapper.writeValueAsString(invoice), counter);
+                storageService.saveInvoice(invoiceJsonData);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+        storageService.saveFile(counter, pdf);
 
-        return ResponseEntity.ok().body(pdf.hashCode());
+        return ResponseEntity.ok().body(counter);
     }
 
     @GetMapping(value = "api/keys")
-    public ResponseEntity<Invoice> getInvoice(@RequestParam int key){
+    public ResponseEntity<?> getInvoice(@RequestParam int key) {
 
-        Invoice invoice = storageService.getInvoice(key);
+        if (!storageService.getInvoicesRepository().exists(key)){
+            return ResponseEntity.notFound().build();
+        }
+
+
+        InvoiceJsonData invoiceJsonData = storageService.getInvoice(key);
+        ObjectMapper mapper = new ObjectMapper();
+        Invoice invoice = null;
+        try {
+            invoice = mapper.readValue(invoiceJsonData.getData(), Invoice.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return ResponseEntity
                 .ok()
@@ -54,15 +82,20 @@ public class InvoiceGeneratorController {
     }
 
     @GetMapping(value = "files/{key}")
-    public ResponseEntity<InputStreamResource> getPDFInvoice(@PathVariable int key) {
+    public ResponseEntity<?> getPDFInvoice(@PathVariable int key) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
-        headers.add("Content-Disposition", "attachment; filename="+ key + ".pdf");
+        headers.add("Content-Disposition", "attachment; filename=" + key + ".pdf");
+
+        if (!storageService.getPdfFiles().containsKey(key)) {
+            return ResponseEntity.notFound().build();
+        }
 
         InputStreamResource pdf = storageService.getFile(key);
+        storageService.deleteFile(key);
 
         return ResponseEntity
                 .ok()
