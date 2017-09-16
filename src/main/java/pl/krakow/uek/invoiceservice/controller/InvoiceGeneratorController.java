@@ -3,6 +3,7 @@ package pl.krakow.uek.invoiceservice.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdk.nashorn.internal.parser.JSONParser;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -17,6 +18,7 @@ import pl.krakow.uek.invoiceservice.service.PDFGenerationService;
 import pl.krakow.uek.invoiceservice.service.StorageService;
 import pl.krakow.uek.invoiceservice.service.properties.PDFGenerationProperties;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -55,7 +57,13 @@ public class InvoiceGeneratorController {
                 e.printStackTrace();
             }
         }
-        storageService.saveFile(counter, pdf);
+        byte[] pdfBytes = new byte[0];
+        try {
+            pdfBytes = IOUtils.toByteArray(pdf);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        storageService.saveFile(counter, pdfBytes);
 
         return ResponseEntity.ok().body(counter);
     }
@@ -89,8 +97,7 @@ public class InvoiceGeneratorController {
             return ResponseEntity.notFound().build();
         }
 
-        InputStreamResource pdf = new InputStreamResource(storageService.getFile(key));
-        storageService.deleteFile(key);
+        InputStreamResource pdf = new InputStreamResource(new ByteArrayInputStream(storageService.getFile(key)));
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");

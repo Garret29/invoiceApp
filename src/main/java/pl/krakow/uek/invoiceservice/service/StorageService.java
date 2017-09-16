@@ -12,12 +12,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class StorageService {
-    private final HashMap<Integer, InputStream> pdfFiles;
+    private final HashMap<Integer, byte[]> pdfFiles;
     private final InvoicesRepository invoicesRepository;
     private AtomicInteger atomicInteger;
 
     @Autowired
-    public StorageService(HashMap<Integer, InputStream> pdfFiles, InvoicesRepository invoicesRepository, AtomicInteger atomicInteger) {
+    public StorageService(HashMap<Integer, byte[]> pdfFiles, InvoicesRepository invoicesRepository, AtomicInteger atomicInteger) {
         this.pdfFiles = pdfFiles;
         this.invoicesRepository = invoicesRepository;
         this.atomicInteger = atomicInteger;
@@ -27,11 +27,11 @@ public class StorageService {
         pdfFiles.remove(key);
     }
 
-    public void saveFile(int key, InputStream file){
+    public void saveFile(int key, byte[] file){
             pdfFiles.put(key,file);
     }
 
-    public InputStream getFile(int key){
+    public byte[] getFile(int key){
         return pdfFiles.get(key);
     }
 
@@ -51,7 +51,7 @@ public class StorageService {
         return atomicInteger;
     }
 
-    public HashMap<Integer, InputStream> getPdfFiles() {
+    public HashMap<Integer, byte[]> getPdfFiles() {
         return pdfFiles;
     }
 

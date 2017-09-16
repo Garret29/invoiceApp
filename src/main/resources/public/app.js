@@ -7,7 +7,6 @@ app.controller('controller', function ($scope, $window, $http, $location) {
     $scope.url = $location.absUrl();
     $scope.userId = null;
     $scope.save = false;
-    $scope.showLink = false;
 
     $scope.invoice =
         {
@@ -82,7 +81,6 @@ app.controller('controller', function ($scope, $window, $http, $location) {
         }).then(function (response) {
             $scope.id = response.data;
             $scope.docUrl = $scope.url + "files/" + response.data;
-            $scope.showLink = true;
         })
     };
 
