@@ -114,7 +114,18 @@ app.controller('controller', function ($scope, $window, $http, $location) {
         $scope.invoice.goods.splice(index, 1)
     };
 
-    $scope.updateFromApi = function () {
+    $scope.loadBankNameFromApi = function () {
+        console.log("http://jakitobank.pl/api/?numer=PL"+$scope.invoice.provider.providerBankNumber);
+      $http({
+          method: "GET",
+          url: "http://jakitobank.pl/api/?numer=PL"+$scope.invoice.provider.providerBankNumber,
+          crossOrigin: true
+      }).then(function (response) {
+          $scope.providerBank = response.data["nazwa_banku"]
+      })
+    };
+
+    $scope.updateProviderDataFromApi = function () {
 
         $http({
             method: "GET",

@@ -85,7 +85,7 @@
         <label class="info-label">Dane dostawcy:</label> <br>
         <label for="providerNIPInput">NIP/PESEL:</label>
         <input id="providerNIPInput" type="number" ng-model="invoice.provider.providerNIP">
-        <button class="btn btn-default" ng-click="updateFromApi()">Wczytaj dane z API</button>
+        <button class="btn btn-default" ng-click="updateProviderDataFromApi()">Wczytaj dane z API</button>
         <br>
         <label for="providerNameInput">Nazwa dostawcy:</label>
         <input id="providerNameInput" ng-model="invoice.provider.providerName">
@@ -106,7 +106,7 @@
         <input id="providerPostalCodeInput" ng-model="invoice.provider.providerPostalCode">
         <br>
         <label for="providerBankNumberInput">Nr rachunku:</label>
-        <input id="providerBankNumberInput" type="number" min="0" maxlength="26" ng-model="invoice.provider.providerBankNumber">
+        <input id="providerBankNumberInput" ng-change="loadBankNameFromApi()" ng-model="invoice.provider.providerBankNumber">
         <br>
         <label for="providerBankInput">Nazwa banku:</label>
         <input id="providerBankInput" ng-model="invoice.provider.providerBank">
