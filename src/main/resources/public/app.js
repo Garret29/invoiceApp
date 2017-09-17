@@ -115,10 +115,10 @@ app.controller('controller', function ($scope, $window, $http, $location) {
     };
 
     $scope.loadBankNameFromApi = function () {
-        console.log("http://jakitobank.pl/api/?numer=PL"+$scope.invoice.provider.providerBankNumber);
+        console.log("https://jakitobank.pl/api/?numer=PL"+$scope.invoice.provider.providerBankNumber);
       $http({
           method: "GET",
-          url: "http://jakitobank.pl/api/?numer=PL"+$scope.invoice.provider.providerBankNumber,
+          url: "https://jakitobank.pl/api/?numer=PL"+$scope.invoice.provider.providerBankNumber,
           crossOrigin: true
       }).then(function (response) {
           $scope.providerBank = response.data["nazwa_banku"]
