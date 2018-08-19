@@ -7,6 +7,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import pl.krakow.uek.invoiceservice.service.properties.PDFGenerationProperties;
 
+import java.util.*;
+
 @SpringBootApplication
 @EnableConfigurationProperties(PDFGenerationProperties.class)
 public class InvoiceApplication {

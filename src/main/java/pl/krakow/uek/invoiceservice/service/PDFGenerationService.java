@@ -43,7 +43,6 @@ public class PDFGenerationService {
             resourcesList.forEach(resource -> {
                 try {
                     fonts.add(resource.getURL().toString());
-                    fonts.forEach(System.out::println);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -53,6 +52,7 @@ public class PDFGenerationService {
         }
 
     }
+
     /*
     public File createInvoicePDFFile(Invoice invoice) {
         cacheDir = new File(pdfGenerationProperties.getCacheDirPath());

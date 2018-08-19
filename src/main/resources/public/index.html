@@ -17,6 +17,10 @@
         width: 200px;
     }
 
+    red {
+        color: red;
+    }
+
     #infoL-label-req {
         color: crimson;
         font-weight: bold;
@@ -29,6 +33,10 @@
     }
 
     .jumbotron {
+        background-color: azure;
+    }
+
+    .col-jumb {
         background-color: azure;
     }
 
@@ -47,18 +55,46 @@
 
 </style>
 <body ng-app="invoiceApp" ng-controller="controller">
-<div class="jumbotron">
-    <div class="text-center">
-        <h1>PDF Invoice Generator</h1><br>
-        <h3 ng-if="id != null" ng-show="save">ID twojej faktury to: {{id}}</h3>
+<div class="jumbotron row">
+    <div class="col-sm-4">
+        <!--<button class="btn btn-default" ng-hide="logged" data-toggle="modal" data-target="#modalLogIn">Zaloguj się-->
+        <!--</button>-->
+        <!--<button class="btn btn-default" ng-hide="logged" data-toggle="modal" data-target="#modalSignIn">Zarejstruj się-->
+        <!--</button>-->
+        <!--<button class="btn btn-default" ng-show="logged">Wyloguj się</button>-->
     </div>
-    <div class="text-right">
-        <input ng-model="userId" type="number" placeholder="ID">
-        <button class="btn btn-default" ng-click="loadFromDB()" ng-disabled="userId==null || userId==''">Wczytaj dane z
-            bazy
-        </button>
+    <div class="col-sm-4">
+        <h1>PDF Invoice Generator</h1>
+        <!--<h3 ng-if="id != null" ng-show="save">ID twojej faktury to: {{id}}</h3>-->
+    </div>
+    <div class="col-sm-4">
+        <!--<input ng-model="userId" type="number" placeholder="ID">-->
+        <!--<button class="btn btn-default" ng-click="loadFromDB()" ng-disabled="userId==null || userId==''">Wczytaj dane z-->
+            <!--bazy-->
+        <!--</button>-->
     </div>
 </div>
+
+<!--<div id="modalLogIn" class="modal fade" role="dialog">-->
+    <!--<div class="modal-dialog">-->
+        <!--<form>-->
+            <!--<input><br>-->
+            <!--<input><br>-->
+            <!--<button>Zatwierdź</button>-->
+        <!--</form>-->
+    <!--</div>-->
+<!--</div>-->
+<!--<div id="modalSignIn" class="modal fade" role="dialog">-->
+    <!--<div class="modal-dialog">-->
+        <!--<form>-->
+            <!--<input><br>-->
+            <!--<input><br>-->
+            <!--<input><br>-->
+            <!--<button>Zatwierdź</button>-->
+        <!--</form>-->
+    <!--</div>-->
+<!--</div>-->
+
 <form name="invoiceForm">
     <div class="container-fluid">
         <div class="col-sm-4" id="col1">
@@ -69,16 +105,16 @@
             <label for="invoiceDateInput">Data wystawienia:</label>
             <input id="invoiceDateInput" ng-model="invoice.invoiceDate">
             <br>
-            <label for="invoiceShippingDateInput">Data wysłania towaru:</label>
-            <input id="invoiceShippingDateInput" ng-model="invoice.invoiceShippingDate">
-            <br>
-            <label for="paymentDateInput">Termin zapłaty:</label>
-            <input id="paymentDateInput" ng-model="invoice.paymentDate">
-            <br>
+            <!--<label for="invoiceShippingDateInput">Data wysłania towaru:</label>-->
+            <!--<input id="invoiceShippingDateInput" ng-model="invoice.invoiceShippingDate">-->
+            <!--<br>-->
+            <!--<label for="paymentDateInput">Termin zapłaty:</label>-->
+            <!--<input id="paymentDateInput" ng-model="invoice.paymentDate">-->
+            <!--<br>-->
             <label for="paymentMethodInput">Sposób zapłaty:</label>
             <input id="paymentMethodInput" ng-model="invoice.paymentMethod">
             <br>
-            <label for="idInput">Numer identyfikacyjny*:</label>
+            <label for="idInput"><b><red>Numer identyfikacyjny*</red></b>:</label>
             <input id="idInput" ng-model="invoice.id">
             <br>
         </div>
@@ -86,7 +122,7 @@
             <label class="info-label">Dane dostawcy:</label> <br>
             <label for="providerNIPInput">NIP/PESEL:</label>
             <input id="providerNIPInput" type="number" ng-model="invoice.provider.providerNIP">
-            <button class="btn btn-default" ng-click="updateProviderDataFromApi()">Wczytaj dane z API</button>
+            <!--<button class="btn btn-default" ng-click="updateProviderDataFromApi()">Wczytaj dane z API</button>-->
             <br>
             <label for="providerNameInput">Nazwa dostawcy:</label>
             <input id="providerNameInput" ng-model="invoice.provider.providerName">
@@ -106,38 +142,41 @@
             <label for="providerPostalCodeInput">Kod pocztowy:</label>
             <input id="providerPostalCodeInput" ng-model="invoice.provider.providerPostalCode">
             <br>
-            <label for="providerBankNumberInput">Nr rachunku:</label>
-            <input id="providerBankNumberInput" pattern="[0-9]{26}" maxlength="26"
-                   ng-model="invoice.provider.providerBankNumber">
-            <br>
-            <label for="providerBankInput">Nazwa banku:</label>
-            <input id="providerBankInput" ng-model="invoice.provider.providerBank">
-            <br>
+            <!--<label for="providerBankNumberInput">Nr rachunku:</label>-->
+            <!--<input id="providerBankNumberInput" pattern="[0-9]{26}" maxlength="26"-->
+                   <!--ng-model="invoice.provider.providerBankNumber" ng-change="">-->
+            <!--<br>-->
+            <!--<label for="providerBankInput">Nazwa banku:</label>-->
+            <!--<input id="providerBankInput" ng-model="invoice.provider.providerBank">-->
+            <!--<br>-->
             <p id="infoL-label-req">* - pola wymagane</p>
         </div>
         <div class="col-sm-4" id="col3">
             <label class="info-label">Dane kupującego:</label><br>
+            <label for="buyerNIPInput">NIP/PESEL:</label>
+            <input id="buyerNIPInput" type="number" ng-model="invoice.buyer.buyerNIP">
+            <br>
             <label for="buyerNameInput">Nazwa:</label>
-            <input id="buyerNameInput" ng-model="invoice.buyerName">
+            <input id="buyerNameInput" ng-model="invoice.buyer.buyerName">
             <br>
             <label for="buyerStreetInput">Ulica:</label>
-            <input id="buyerStreetInput" ng-model="invoice.buyerStreet">
+            <input id="buyerStreetInput" ng-model="invoice.buyer.buyerStreet">
             <br>
             <label for="buyerHouseInput">Nr domu:</label>
-            <input id="buyerHouseInput" ng-model="invoice.buyerHouse">
+            <input id="buyerHouseInput" ng-model="invoice.buyer.buyerHouse">
             <br>
             <label for="buyerApartmentInput">Nr lokalu:</label>
-            <input id="buyerApartmentInput" ng-model="invoice.buyerApartment">
+            <input id="buyerApartmentInput" ng-model="invoice.buyer.buyerApartment">
             <br>
             <label for="buyerCityInput">Miasto:</label>
-            <input id="buyerCityInput" ng-model="invoice.buyerCity">
+            <input id="buyerCityInput" ng-model="invoice.buyer.buyerCity">
             <br>
             <label for="buyerPostalCodeInput">Kod pocztowy:</label>
-            <input id="buyerPostalCodeInput" ng-model="invoice.buyerPostalCode">
+            <input id="buyerPostalCodeInput" ng-model="invoice.buyer.buyerPostalCode">
             <br>
-            <label>Zapisać dane faktury w bazie danych?
-                <input type="checkbox" ng-model="save">
-            </label>
+            <!--<label>Zapisać dane faktury w bazie danych?-->
+                <!--<input type="checkbox" ng-model="save">-->
+            <!--</label>-->
             <button class="btn btn-primary" ng-disabled="invoiceForm.$invalid" ng-click="getPdfInvoice()">Pobierz link
                 do dokumentu
             </button>
@@ -149,29 +188,29 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>Nazwa*</th>
-                    <th>Ilość*</th>
-                    <th>Jednostka*</th>
-                    <th>Cena netto za jednostkę*</th>
-                    <th>Rabat[%]*</th>
-                    <th>Stawka VAT*</th>
+                    <th><red><b>Nazwa*</b></red></th>
+                    <th><red><b>Ilość*</b></red></th>
+                    <!--<th>Jednostka*</th>-->
+                    <th><red><b>Cena netto za jednostkę*</b></red></th>
+                    <!--<th>Rabat[%]*</th>-->
+                    <!--<th>Stawka VAT*</th>-->
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="good in invoice.goods">
                     <td><input ng-model="good.name" required/></td>
                     <td><input type="number" ng-model="good.quantity" step="0.01" min="0" required/></td>
-                    <td><input ng-model="good.unit" required/></td>
+                    <!--<td><input ng-model="good.unit" required/></td>-->
                     <td><input type="number" ng-model="good.priceNetOfUnit" step="0.01" min="0" required/></td>
-                    <td><input type="number" ng-model="good.discount" step="0.01" min="0" required/></td>
-                    <td>
-                        <select data-ng-model="good.vatRate" required>
-                            <option>0</option>
-                            <option>5</option>
-                            <option>8</option>
-                            <option>23</option>
-                        </select>
-                    </td>
+                    <!--<td><input type="number" ng-model="good.discount" step="0.01" min="0" required/></td>-->
+                    <!--<td>-->
+                        <!--<select data-ng-model="good.vatRate" required>-->
+                            <!--<option>0</option>-->
+                            <!--<option>5</option>-->
+                            <!--<option>8</option>-->
+                            <!--<option>23</option>-->
+                        <!--</select>-->
+                    <!--</td>-->
                     <td>
                         <button class="btn btn-danger" ng-disabled="invoice.goods.length<=1"
                                 ng-click="removeGood($index)">Usuń

@@ -1,6 +1,7 @@
 package pl.krakow.uek.invoiceservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import pl.krakow.uek.invoiceservice.model.InvoiceJsonData;

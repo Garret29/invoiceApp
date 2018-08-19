@@ -7,6 +7,7 @@ app.controller('controller', function ($scope, $window, $http, $location) {
     $scope.url = $location.absUrl();
     $scope.userId = null;
     $scope.save = false;
+    $scope.logged = false;
 
     $scope.invoice =
         {
@@ -35,7 +36,8 @@ app.controller('controller', function ($scope, $window, $http, $location) {
                 "buyerHouse": "",
                 "buyerApartment": "",
                 "buyerCity": "",
-                "buyerPostalCode": ""
+                "buyerPostalCode": "",
+                "buyerNIP": ""
             },
             "goods": [
                 {
@@ -43,11 +45,11 @@ app.controller('controller', function ($scope, $window, $http, $location) {
                     "quantity": null,
                     "unit": "",
                     "priceNetOfUnit": null,
-                    "discount": null,
+                    "discount": 0.0,
                     "priceNetOfUnitAfterDiscount": 0.0,
                     "priceNetto": 0.0,
                     "priceGross": 0.0,
-                    "vatRate": null,
+                    "vatRate": 0.0,
                     "vat": 0.0
                 }
             ],
@@ -115,10 +117,10 @@ app.controller('controller', function ($scope, $window, $http, $location) {
     };
 
     $scope.loadBankNameFromApi = function () {
-        console.log("https://jakitobank.pl/api/?numer=PL"+$scope.invoice.provider.providerBankNumber);
+        console.log("http://jakitobank.pl/api/?numer=PL"+$scope.invoice.provider.providerBankNumber);
       $http({
           method: "GET",
-          url: "https://jakitobank.pl/api/?numer=PL"+$scope.invoice.provider.providerBankNumber,
+          url: "http://jakitobank.pl/api/?numer=PL"+$scope.invoice.provider.providerBankNumber,
           crossOrigin: true
       }).then(function (response) {
           $scope.providerBank = response.data["nazwa_banku"]

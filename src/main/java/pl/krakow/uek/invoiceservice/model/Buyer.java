@@ -9,6 +9,8 @@ import java.io.Serializable;
 public class Buyer implements Serializable {
     @Element(name = "nazwa")
     private String buyerName;
+    @Element(name = "NIP_PESEL")
+    private String buyerNIP;
     @Element(name = "ulica")
     private String buyerStreet;
     @Element(name = "dom")
@@ -20,8 +22,9 @@ public class Buyer implements Serializable {
     @Element(name = "kod")
     private String buyerPostalCode;
 
-    public Buyer(String buyerName, String buyerStreet, String buyerHouse, String buyerApartment, String buyerCity, String buyerPostalCode) {
+    public Buyer(String buyerName, String buyerNIP, String buyerStreet, String buyerHouse, String buyerApartment, String buyerCity, String buyerPostalCode) {
         this.buyerName = buyerName;
+        this.buyerNIP = buyerNIP;
         this.buyerStreet = buyerStreet;
         this.buyerHouse = buyerHouse;
         this.buyerApartment = buyerApartment;
@@ -78,5 +81,13 @@ public class Buyer implements Serializable {
 
     public void setBuyerPostalCode(String buyerPostalCode) {
         this.buyerPostalCode = buyerPostalCode;
+    }
+
+    public String getBuyerNIP() {
+        return buyerNIP;
+    }
+
+    public void setBuyerNIP(String buyerNIP) {
+        this.buyerNIP = buyerNIP;
     }
 }

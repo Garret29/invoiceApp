@@ -9,14 +9,14 @@ public class InvoiceJsonData {
 
     @Lob
     @Column(columnDefinition = "TEXT")
-    private
-    String data;
+    private String data;
 
     public InvoiceJsonData(String data, Integer id) {
         this.data = data;
         this.id = id;
     }
 
+    //JPA only
     public InvoiceJsonData() {
     }
 
