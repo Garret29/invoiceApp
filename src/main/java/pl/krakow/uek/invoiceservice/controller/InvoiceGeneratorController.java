@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-@RequestMapping(value = "/")
 @RestController
 public class InvoiceGeneratorController {
 
@@ -39,7 +38,7 @@ public class InvoiceGeneratorController {
     }
 
 
-    @PostMapping(value = "api")
+    @PostMapping(value = "/api")
     public ResponseEntity<?> postPDFInvoice(@RequestBody Invoice invoice, @RequestParam(defaultValue = "false") boolean save) {
 
         invoice.getGoods().forEach(Good::doCalculations);
@@ -68,7 +67,7 @@ public class InvoiceGeneratorController {
         return ResponseEntity.ok().body(counter);
     }
 
-    @GetMapping(value = "api/keys")
+    @GetMapping(value = "/api/keys")
     public ResponseEntity<?> getInvoice(@RequestParam int key) {
 
         if (!storageService.getInvoicesRepository().exists(key)){
@@ -90,7 +89,7 @@ public class InvoiceGeneratorController {
                 .body(invoice);
     }
 
-    @GetMapping(value = "files/{key}")
+    @GetMapping(value = "/files/{key}")
     public ResponseEntity<?> getPDFInvoice(@PathVariable int key) {
 
         if (!storageService.getPdfFiles().containsKey(key)) {

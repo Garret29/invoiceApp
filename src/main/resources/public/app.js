@@ -5,6 +5,7 @@ app.controller('controller', function ($scope, $window, $http, $location) {
     $scope.id = null;
     $scope.docUrl = null;
     $scope.url = $location.absUrl();
+    // $scope.url = $location.url($location.path());
     $scope.userId = null;
     $scope.save = false;
     $scope.logged = false;
@@ -72,8 +73,9 @@ app.controller('controller', function ($scope, $window, $http, $location) {
         };
 
     $scope.getPdfInvoice = function () {
+        let url = $scope.url + "/api?save=" + $scope.save;
         $http({
-            url: $scope.url + "/api?save="+$scope.save,
+            url: url,
             dataType: "json",
             method: "POST",
             headers: {
@@ -87,13 +89,14 @@ app.controller('controller', function ($scope, $window, $http, $location) {
     };
 
     $scope.loadFromDB = function () {
+        let url = $scope.url + "/api/keys?key=" + $scope.userId;
         $http(
             {
-                url: $scope.url + "/api/keys?key="+$scope.userId,
+                url: url,
                 method: "GET"
             }
         ).then(function (response) {
-            $scope.invoice=response.data;
+            $scope.invoice = response.data;
         })
     };
 
@@ -117,14 +120,14 @@ app.controller('controller', function ($scope, $window, $http, $location) {
     };
 
     $scope.loadBankNameFromApi = function () {
-        console.log("http://jakitobank.pl/api/?numer=PL"+$scope.invoice.provider.providerBankNumber);
-      $http({
-          method: "GET",
-          url: "http://jakitobank.pl/api/?numer=PL"+$scope.invoice.provider.providerBankNumber,
-          crossOrigin: true
-      }).then(function (response) {
-          $scope.providerBank = response.data["nazwa_banku"]
-      })
+        console.log("http://jakitobank.pl/api/?numer=PL" + $scope.invoice.provider.providerBankNumber);
+        $http({
+            method: "GET",
+            url: "http://jakitobank.pl/api/?numer=PL" + $scope.invoice.provider.providerBankNumber,
+            crossOrigin: true
+        }).then(function (response) {
+            $scope.providerBank = response.data["nazwa_banku"]
+        })
     };
 
     $scope.updateProviderDataFromApi = function () {
@@ -141,6 +144,10 @@ app.controller('controller', function ($scope, $window, $http, $location) {
             $scope.invoice.provider.providerHouse = json["krs_podmioty.adres_numer"];
             $scope.invoice.provider.providerPostalCode = json["krs_podmioty.adres_kod_pocztowy"];
         })
+    };
+
+    this.$onInit = ()=>{
+        $scope.url =$scope.url.split('?')[0]
     }
 
 });
