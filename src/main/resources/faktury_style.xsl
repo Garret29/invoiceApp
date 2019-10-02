@@ -113,6 +113,7 @@
                     <tr>
                         <th align="center">L.p</th>
                         <th align="center">Nazwa usługi</th>
+                        <th align="center">J.m.</th>
                         <th align="center">Ilość</th>
                         <th align="center">Cena jedn.
                             <br/>
@@ -130,6 +131,9 @@
                             </td>
                             <td align="right">
                                 <xsl:value-of select="nazwa"/>
+                            </td>
+                            <td align="right">
+                                sztuka
                             </td>
                             <td align="right">
                                 <xsl:value-of select='format-number(ilosc, "## ###,##", "pln")'/>
