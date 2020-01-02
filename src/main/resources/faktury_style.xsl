@@ -171,6 +171,11 @@
                     <xsl:if test="sposob_platnosci !='' ">
                         <xsl:value-of select="sposob_platnosci"/>
                     </xsl:if>
+                    <br/>
+                    <xsl:if test="dostawca/rachunek !='' ">
+                        Numer konta:
+                        <xsl:value-of select="dostawca/rachunek"/>
+                    </xsl:if>
                 </xsl:for-each>
                 <br/>
             </body>

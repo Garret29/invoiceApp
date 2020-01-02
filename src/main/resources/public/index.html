@@ -115,7 +115,7 @@
             <input id="paymentMethodInput" ng-model="invoice.paymentMethod">
             <br>
             <label for="idInput"><b><red>Numer identyfikacyjny*</red></b>:</label>
-            <input id="idInput" ng-model="invoice.id">
+            <input id="idInput" ng-model="invoice.id" required>
             <br>
         </div>
         <div class="col-sm-4" id="col2">
@@ -142,13 +142,10 @@
             <label for="providerPostalCodeInput">Kod pocztowy:</label>
             <input id="providerPostalCodeInput" ng-model="invoice.provider.providerPostalCode">
             <br>
-            <!--<label for="providerBankNumberInput">Nr rachunku:</label>-->
-            <!--<input id="providerBankNumberInput" pattern="[0-9]{26}" maxlength="26"-->
-                   <!--ng-model="invoice.provider.providerBankNumber" ng-change="">-->
-            <!--<br>-->
-            <!--<label for="providerBankInput">Nazwa banku:</label>-->
-            <!--<input id="providerBankInput" ng-model="invoice.provider.providerBank">-->
-            <!--<br>-->
+            <label for="providerBankNumberInput">Nr rachunku:</label>
+            <input id="providerBankNumberInput"
+                   ng-model="invoice.provider.providerBankNumber" required>
+            <br>
             <p id="infoL-label-req">* - pola wymagane</p>
         </div>
         <div class="col-sm-4" id="col3">
