@@ -1,9 +1,6 @@
 package pl.krakow.uek.invoiceservice.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -13,6 +10,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Root(name = "nabywca")
 public class Buyer implements Serializable {
     @Element(name = "nazwa")

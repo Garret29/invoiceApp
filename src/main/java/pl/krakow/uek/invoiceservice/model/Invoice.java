@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Root(name = "faktura")
 public class Invoice implements Serializable, Calculable {
     @Element(name = "miejscowosc_wystawienia")
