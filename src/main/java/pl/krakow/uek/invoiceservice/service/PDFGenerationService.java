@@ -2,73 +2,59 @@ package pl.krakow.uek.invoiceservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 import pl.krakow.uek.invoiceservice.model.Invoice;
-import pl.krakow.uek.invoiceservice.service.properties.PDFGenerationProperties;
 import pl.krakow.uek.invoiceservice.util.PDFGenerator;
 import pl.krakow.uek.invoiceservice.util.XMLSerializer;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PDFGenerationService {
-    private final PDFGenerationProperties pdfGenerationProperties;
-    private File cacheDir;
     @Value("classpath:faktury_style.xsl")
     Resource style;
     private final PDFGenerator pdfGenerator;
     private final XMLSerializer xmlSerializer;
-    private final LinkedList<String> fonts;
+    private List<String> fonts;
 
     @Autowired
-    public PDFGenerationService(PDFGenerator pdfGenerator, PDFGenerationProperties pdfGenerationProperties, XMLSerializer xmlSerializer, LinkedList<String> fonts) {
+    public PDFGenerationService(PDFGenerator pdfGenerator, XMLSerializer xmlSerializer) {
         this.pdfGenerator = pdfGenerator;
-        this.pdfGenerationProperties = pdfGenerationProperties;
         this.xmlSerializer = xmlSerializer;
-        this.fonts = fonts;
+        List<String> fontURLs = tryGetFonts();
+        this.fonts = new ArrayList<>(fontURLs);
+    }
 
+    private List<String> tryGetFonts() {
+        List<String> fontURLs;
+        try {
+            fontURLs = getFonts();
+        } catch (IOException e) {
+            fontURLs = Collections.emptyList();
+        }
+        return fontURLs;
+    }
+
+    private List<String> getFonts() throws IOException {
         ClassLoader cl = this.getClass().getClassLoader();
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(cl);
-        Resource[] resources = null;
-        try {
-            resources = resolver.getResources("classpath*:/fonts/*.ttf");
-            List<Resource> resourcesList = Arrays.asList(resources);
-            resourcesList.forEach(resource -> {
-                try {
-                    fonts.add(resource.getURL().toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        Resource[] resources = resolver.getResources("classpath*:/fonts/*.ttf");
+        return Arrays.asList(resources).stream().map(resource -> {
+                    try {
+                        return resource.getURL().toString();
+                    } catch (IOException ignored) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
-    /*
-    public File createInvoicePDFFile(Invoice invoice) {
-        cacheDir = new File(pdfGenerationProperties.getCacheDirPath());
-
-        File xml = new File(cacheDir, invoice.getId() + ".xml");
-        xmlSerializer.serialize(xml, invoice);
-        File pdf = null;
-        try {
-            pdf = pdfGenerator.generatePDF(style.getFile(), xml, cacheDir, invoice.getId(), cacheDir);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return pdf;
-    }
-    */
 
     public InputStream createInvoicePDFStream(Invoice invoice) {
         ByteArrayOutputStream xmlOs = new ByteArrayOutputStream();
