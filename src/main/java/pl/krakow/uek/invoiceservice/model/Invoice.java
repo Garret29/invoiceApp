@@ -1,15 +1,19 @@
 package pl.krakow.uek.invoiceservice.model;
 
+import lombok.*;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-import javax.persistence.Entity;
 import java.io.Serializable;
 import java.util.List;
-@Root(name = "faktura")
-public class Invoice implements Serializable {
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Root(name = "faktura")
+public class Invoice implements Serializable, Calculable {
     @Element(name = "miejscowosc_wystawienia")
     private String invoiceCity;
     @Element(name = "data_wystawienia")
@@ -33,7 +37,6 @@ public class Invoice implements Serializable {
     @ElementList(name = "towary")
     private List<Good> goods;
 
-    //Razem:
     @Element(name = "gross")
     private double gross;
     @Element(name = "VAT")
@@ -69,48 +72,10 @@ public class Invoice implements Serializable {
     @Element(name = "gross_23")
     private double gross_23;
 
-    public Invoice() {
-    }
-
-    public Invoice(String invoiceCity, String invoiceDate, String invoiceShippingDate, String paymentDate, String paymentMethod, String id, Provider provider, Buyer buyer, List<Good> goods, double gross, double vat, double netto, String bruttoWords, double vat_0, double vat_5, double vat_8, double vat_23, double net_0, double net_5, double net_8, double net_23, double gross_0, double gross_5, double gross_8, double gross_23) {
-
-        this.invoiceCity = invoiceCity;
-        this.invoiceDate = invoiceDate;
-        this.invoiceShippingDate = invoiceShippingDate;
-        this.paymentDate = paymentDate;
-        this.paymentMethod = paymentMethod;
-        this.id = id;
-        this.provider = provider;
-        this.buyer = buyer;
-
-        this.bruttoWords = bruttoWords;
-
-        this.goods = goods;
-
-        this.gross = gross;
-        this.netto = netto;
-        this.vat = vat;
-
-        this.vat_0 = vat_0;
-        this.vat_5 = vat_5;
-        this.vat_8 = vat_8;
-        this.vat_23 = vat_23;
-        this.net_0 = net_0;
-        this.net_5 = net_5;
-        this.net_8 = net_8;
-        this.net_23 = net_23;
-        this.gross_0 = gross_0;
-        this.gross_5 = gross_5;
-        this.gross_8 = gross_8;
-        this.gross_23 = gross_23;
-    }
-
-    public void addGood(Good good) {
-        goods.add(good);
-    }
-
-    public void doCalculations() {
+    @Override
+    public void calculate() {
         goods.forEach(good -> {
+            good.calculate();
             gross += good.getPriceGross();
             netto += good.getPriceNetto();
 
@@ -152,206 +117,6 @@ public class Invoice implements Serializable {
 
     }
 
-    public double getNet_0() {
-        return net_0;
-    }
-
-    public void setNet_0(double net_0) {
-        this.net_0 = net_0;
-    }
-
-    public double getNet_5() {
-        return net_5;
-    }
-
-    public void setNet_5(double net_5) {
-        this.net_5 = net_5;
-    }
-
-    public double getNet_8() {
-        return net_8;
-    }
-
-    public void setNet_8(double net_8) {
-        this.net_8 = net_8;
-    }
-
-    public double getNet_23() {
-        return net_23;
-    }
-
-    public void setNet_23(double net_23) {
-        this.net_23 = net_23;
-    }
-
-    public double getGross_0() {
-        return gross_0;
-    }
-
-    public void setGross_0(double gross_0) {
-        this.gross_0 = gross_0;
-    }
-
-    public double getGross_5() {
-        return gross_5;
-    }
-
-    public void setGross_5(double gross_5) {
-        this.gross_5 = gross_5;
-    }
-
-    public double getGross_8() {
-        return gross_8;
-    }
-
-    public void setGross_8(double gross_8) {
-        this.gross_8 = gross_8;
-    }
-
-    public double getGross_23() {
-        return gross_23;
-    }
-
-    public void setGross_23(double gross_23) {
-        this.gross_23 = gross_23;
-    }
-
-    public double getVat_0() {
-        return vat_0;
-    }
-
-    public void setVat_0(double vat_0) {
-        this.vat_0 = vat_0;
-    }
-
-    public double getVat_5() {
-        return vat_5;
-    }
-
-    public void setVat_5(double vat_5) {
-        this.vat_5 = vat_5;
-    }
-
-    public double getVat_8() {
-        return vat_8;
-    }
-
-    public void setVat_8(double vat_8) {
-        this.vat_8 = vat_8;
-    }
-
-    public double getVat_23() {
-        return vat_23;
-    }
-
-    public void setVat_23(double vat_23) {
-        this.vat_23 = vat_23;
-    }
-
-    public String getInvoiceCity() {
-        return invoiceCity;
-    }
-
-    public void setInvoiceCity(String invoiceCity) {
-        this.invoiceCity = invoiceCity;
-    }
-
-    public String getInvoiceDate() {
-        return invoiceDate;
-    }
-
-    public void setInvoiceDate(String invoiceDate) {
-        this.invoiceDate = invoiceDate;
-    }
-
-    public String getInvoiceShippingDate() {
-        return invoiceShippingDate;
-    }
-
-    public void setInvoiceShippingDate(String invoiceShippingDate) {
-        this.invoiceShippingDate = invoiceShippingDate;
-    }
-
-    public String getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(String paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Provider getProvider() {
-        return provider;
-    }
-
-    public void setProvider(Provider provider) {
-        this.provider = provider;
-    }
-
-    public Buyer getBuyer() {
-        return buyer;
-    }
-
-    public void setBuyer(Buyer buyer) {
-        this.buyer = buyer;
-    }
-
-    public List<Good> getGoods() {
-        return goods;
-    }
-
-    public void setGoods(List<Good> goods) {
-        this.goods = goods;
-    }
-
-    public double getGross() {
-        return gross;
-    }
-
-    public void setGross(double gross) {
-        this.gross = gross;
-    }
-
-    public double getVat() {
-        return vat;
-    }
-
-    public void setVat(double vat) {
-        this.vat = vat;
-    }
-
-    public double getNetto() {
-        return netto;
-    }
-
-    public void setNetto(double netto) {
-        this.netto = netto;
-    }
-
-    public String getBruttoWords() {
-        return bruttoWords;
-    }
-
-    public void setBruttoWords(String bruttoWords) {
-        this.bruttoWords = bruttoWords;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -381,7 +146,8 @@ public class Invoice implements Serializable {
         if (paymentDate != null ? !paymentDate.equals(invoice.paymentDate) : invoice.paymentDate != null) return false;
         if (paymentMethod != null ? !paymentMethod.equals(invoice.paymentMethod) : invoice.paymentMethod != null)
             return false;
-        if (id != null ? !id.equals(invoice.id) : invoice.id != null) return false;
+        if (id != null ? !id.equals(invoice.id) : invoice.id != null)
+            return false;
         if (provider != null ? !provider.equals(invoice.provider) : invoice.provider != null) return false;
         if (buyer != null ? !buyer.equals(invoice.buyer) : invoice.buyer != null) return false;
         if (goods != null ? !goods.equals(invoice.goods) : invoice.goods != null) return false;

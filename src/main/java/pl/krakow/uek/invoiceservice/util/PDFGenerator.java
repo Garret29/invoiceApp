@@ -26,16 +26,15 @@ public class PDFGenerator {
         ByteArrayOutputStream pdfOs=null;
 
         try {
-            Transformer transformer = transformerFactory.newTransformer(new StreamSource(xsl));
             ByteArrayOutputStream htmlOs = new ByteArrayOutputStream();
-            ByteArrayOutputStream html2Os = new ByteArrayOutputStream();
             StreamResult streamResult = new StreamResult(htmlOs);
-
+            Transformer transformer = transformerFactory.newTransformer(new StreamSource(xsl));
             transformer.transform(new StreamSource(xml), streamResult);
             htmlOs.close();
 
             InputStream htmlIs = new ByteArrayInputStream(htmlOs.toByteArray());
 
+            ByteArrayOutputStream html2Os = new ByteArrayOutputStream();
             Tidy tidy = new Tidy();
             tidy.setInputEncoding("UTF-8");
             tidy.setXHTML(true);

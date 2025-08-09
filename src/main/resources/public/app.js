@@ -5,7 +5,6 @@ app.controller('controller', function ($scope, $window, $http, $location) {
     $scope.id = null;
     $scope.docUrl = null;
     $scope.url = $location.absUrl();
-    // $scope.url = $location.url($location.path());
     $scope.userId = null;
     $scope.save = false;
     $scope.logged = false;
@@ -73,19 +72,26 @@ app.controller('controller', function ($scope, $window, $http, $location) {
         };
 
     $scope.getPdfInvoice = function () {
-        let url = $scope.url + "/api?save=" + $scope.save;
-        $http({
-            url: url,
-            dataType: "json",
-            method: "POST",
+        let url = $scope.url + "/api/invoices";
+        $http.post(url, $scope.invoice, {
+            responseType: 'arraybuffer', // tu
             headers: {
                 "Content-Type": "application/json"
             },
-            data: JSON.stringify($scope.invoice)
+            transformResponse: []
         }).then(function (response) {
-            $scope.id = response.data;
-            $scope.docUrl = $scope.url + "files/" + response.data;
-        })
+            var file = new Blob([response.data], { type: 'application/pdf' });
+            var fileURL = URL.createObjectURL(file);
+            var a = document.createElement('a');
+            a.href = fileURL;
+            a.download = $scope.invoice.id + ".pdf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(fileURL);
+        }, function (error) {
+            console.error("Błąd pobierania PDF:", error);
+        });
     };
 
     $scope.loadFromDB = function () {
