@@ -57,43 +57,9 @@
 <body ng-app="invoiceApp" ng-controller="controller">
 <div class="jumbotron row">
     <div class="col-sm-4">
-        <!--<button class="btn btn-default" ng-hide="logged" data-toggle="modal" data-target="#modalLogIn">Zaloguj się-->
-        <!--</button>-->
-        <!--<button class="btn btn-default" ng-hide="logged" data-toggle="modal" data-target="#modalSignIn">Zarejstruj się-->
-        <!--</button>-->
-        <!--<button class="btn btn-default" ng-show="logged">Wyloguj się</button>-->
-    </div>
-    <div class="col-sm-4">
         <h1>PDF Invoice Generator</h1>
-        <!--<h3 ng-if="id != null" ng-show="save">ID twojej faktury to: {{id}}</h3>-->
-    </div>
-    <div class="col-sm-4">
-        <!--<input ng-model="userId" type="number" placeholder="ID">-->
-        <!--<button class="btn btn-default" ng-click="loadFromDB()" ng-disabled="userId==null || userId==''">Wczytaj dane z-->
-            <!--bazy-->
-        <!--</button>-->
     </div>
 </div>
-
-<!--<div id="modalLogIn" class="modal fade" role="dialog">-->
-    <!--<div class="modal-dialog">-->
-        <!--<form>-->
-            <!--<input><br>-->
-            <!--<input><br>-->
-            <!--<button>Zatwierdź</button>-->
-        <!--</form>-->
-    <!--</div>-->
-<!--</div>-->
-<!--<div id="modalSignIn" class="modal fade" role="dialog">-->
-    <!--<div class="modal-dialog">-->
-        <!--<form>-->
-            <!--<input><br>-->
-            <!--<input><br>-->
-            <!--<input><br>-->
-            <!--<button>Zatwierdź</button>-->
-        <!--</form>-->
-    <!--</div>-->
-<!--</div>-->
 
 <form name="invoiceForm">
     <div class="container-fluid">
@@ -105,12 +71,9 @@
             <label for="invoiceDateInput">Data wystawienia:</label>
             <input id="invoiceDateInput" ng-model="invoice.invoiceDate">
             <br>
-            <!--<label for="invoiceShippingDateInput">Data wysłania towaru:</label>-->
-            <!--<input id="invoiceShippingDateInput" ng-model="invoice.invoiceShippingDate">-->
-            <!--<br>-->
-            <!--<label for="paymentDateInput">Termin zapłaty:</label>-->
-            <!--<input id="paymentDateInput" ng-model="invoice.paymentDate">-->
-            <!--<br>-->
+            <label for="paymentDateInput">Termin zapłaty:</label>
+            <input id="paymentDateInput" ng-model="invoice.paymentDate">
+            <br>
             <label for="paymentMethodInput">Sposób zapłaty:</label>
             <input id="paymentMethodInput" ng-model="invoice.paymentMethod">
             <br>
@@ -170,9 +133,6 @@
             <label for="buyerPostalCodeInput">Kod pocztowy:</label>
             <input id="buyerPostalCodeInput" ng-model="invoice.buyer.buyerPostalCode">
             <br>
-            <!--<label>Zapisać dane faktury w bazie danych?-->
-                <!--<input type="checkbox" ng-model="save">-->
-            <!--</label>-->
             <button class="btn btn-primary" ng-disabled="invoiceForm.$invalid" ng-click="getPdfInvoice()">Wygeneruj fakturę PDF
             </button>
             <br>
@@ -185,27 +145,25 @@
                 <tr>
                     <th><red><b>Nazwa*</b></red></th>
                     <th><red><b>Ilość*</b></red></th>
-                    <!--<th>Jednostka*</th>-->
+                    <th><red><b>Jednostka*</b></red></th>
                     <th><red><b>Cena netto za jednostkę*</b></red></th>
-                    <!--<th>Rabat[%]*</th>-->
-                    <!--<th>Stawka VAT*</th>-->
+                    <th><red><b>Stawka VAT*</b></red></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="good in invoice.goods">
                     <td><input ng-model="good.name" required/></td>
                     <td><input type="number" ng-model="good.quantity" step="0.01" min="0" required/></td>
-                    <!--<td><input ng-model="good.unit" required/></td>-->
+                    <td><input ng-model="good.unit" required/></td>
                     <td><input type="number" ng-model="good.priceNetOfUnit" step="0.01" min="0" required/></td>
-                    <!--<td><input type="number" ng-model="good.discount" step="0.01" min="0" required/></td>-->
-                    <!--<td>-->
-                        <!--<select data-ng-model="good.vatRate" required>-->
-                            <!--<option>0</option>-->
-                            <!--<option>5</option>-->
-                            <!--<option>8</option>-->
-                            <!--<option>23</option>-->
-                        <!--</select>-->
-                    <!--</td>-->
+                    <td>
+                        <select data-ng-model="good.vatRate" required>
+                            <option>0</option>
+                            <option>5</option>
+                            <option>8</option>
+                            <option>23</option>
+                        </select>
+                    </td>
                     <td>
                         <button class="btn btn-danger" ng-disabled="invoice.goods.length<=1"
                                 ng-click="removeGood($index)">Usuń

@@ -117,4 +117,8 @@ public class Invoice implements Serializable, Calculable {
         gross_8 = Math.round(gross_8 * 100.0) / 100.0;
         gross_23 = Math.round(gross_23 * 100.0) / 100.0;
     }
+
+    public boolean isVatInvoice() {
+        return vat > 0.0;
+    }
 }

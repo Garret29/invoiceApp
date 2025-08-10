@@ -16,8 +16,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class PDFGenerationService {
-    @Value("classpath:faktury_style.xsl")
-    Resource style;
+    @Value("classpath:faktura_0_transform.xsl")
+    Resource noVatStyle;
+    @Value("classpath:faktura_1_transform.xsl")
+    Resource vatStyle;
     private final PDFGenerator pdfGenerator;
     private final XMLSerializer xmlSerializer;
     private List<String> fonts;
@@ -55,7 +57,6 @@ public class PDFGenerationService {
                 .collect(Collectors.toList());
     }
 
-
     public InputStream createInvoicePDFStream(Invoice invoice) {
         ByteArrayOutputStream xmlOs = new ByteArrayOutputStream();
         xmlSerializer.serialize(xmlOs, invoice);
@@ -63,7 +64,15 @@ public class PDFGenerationService {
         InputStream pdfStream = null;
         try {
             xmlIs = new ByteArrayInputStream(xmlOs.toByteArray());
-            pdfStream = pdfGenerator.generatePDF(style.getInputStream(), xmlIs, fonts);
+
+            InputStream inputStream;
+            if (invoice.isVatInvoice()) {
+                inputStream = vatStyle.getInputStream();
+            } else {
+                inputStream = noVatStyle.getInputStream();
+            }
+
+            pdfStream = pdfGenerator.generatePDF(inputStream, xmlIs, fonts);
         } catch (IOException e) {
             e.printStackTrace();
         }
