@@ -65,18 +65,22 @@ public class PDFGenerationService {
         try {
             xmlIs = new ByteArrayInputStream(xmlOs.toByteArray());
 
-            InputStream inputStream;
-            if (invoice.isVatInvoice()) {
-                inputStream = vatStyle.getInputStream();
-            } else {
-                inputStream = noVatStyle.getInputStream();
-            }
-
+            InputStream inputStream = getStyleStream(invoice);
             pdfStream = pdfGenerator.generatePDF(inputStream, xmlIs, fonts);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return pdfStream;
+    }
+
+    private InputStream getStyleStream(Invoice invoice) throws IOException {
+        InputStream inputStream;
+        if (invoice.isVatInvoice()) {
+            inputStream = vatStyle.getInputStream();
+        } else {
+            inputStream = noVatStyle.getInputStream();
+        }
+        return inputStream;
     }
 }
