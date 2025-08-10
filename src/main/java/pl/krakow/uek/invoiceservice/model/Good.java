@@ -11,6 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode(of = {"name", "quantity", "unit", "priveNetOfUnit", "discount", "vatRate"})
 @Root(name = "towar")
 public class Good implements Serializable, Calculable {
     @Element(name = "nazwa")

@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(of = "id")
 @Root(name = "faktura")
 public class Invoice implements Serializable, Calculable {
     @Element(name = "miejscowosc_wystawienia")
@@ -115,90 +116,5 @@ public class Invoice implements Serializable, Calculable {
         gross_5 = Math.round(gross_5 * 100.0) / 100.0;
         gross_8 = Math.round(gross_8 * 100.0) / 100.0;
         gross_23 = Math.round(gross_23 * 100.0) / 100.0;
-
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Invoice)) return false;
-
-        Invoice invoice = (Invoice) o;
-
-        if (Double.compare(invoice.gross, gross) != 0) return false;
-        if (Double.compare(invoice.vat, vat) != 0) return false;
-        if (Double.compare(invoice.netto, netto) != 0) return false;
-        if (Double.compare(invoice.vat_0, vat_0) != 0) return false;
-        if (Double.compare(invoice.vat_5, vat_5) != 0) return false;
-        if (Double.compare(invoice.vat_8, vat_8) != 0) return false;
-        if (Double.compare(invoice.vat_23, vat_23) != 0) return false;
-        if (Double.compare(invoice.net_0, net_0) != 0) return false;
-        if (Double.compare(invoice.net_5, net_5) != 0) return false;
-        if (Double.compare(invoice.net_8, net_8) != 0) return false;
-        if (Double.compare(invoice.net_23, net_23) != 0) return false;
-        if (Double.compare(invoice.gross_0, gross_0) != 0) return false;
-        if (Double.compare(invoice.gross_5, gross_5) != 0) return false;
-        if (Double.compare(invoice.gross_8, gross_8) != 0) return false;
-        if (Double.compare(invoice.gross_23, gross_23) != 0) return false;
-        if (invoiceCity != null ? !invoiceCity.equals(invoice.invoiceCity) : invoice.invoiceCity != null) return false;
-        if (invoiceDate != null ? !invoiceDate.equals(invoice.invoiceDate) : invoice.invoiceDate != null) return false;
-        if (invoiceShippingDate != null ? !invoiceShippingDate.equals(invoice.invoiceShippingDate) : invoice.invoiceShippingDate != null)
-            return false;
-        if (paymentDate != null ? !paymentDate.equals(invoice.paymentDate) : invoice.paymentDate != null) return false;
-        if (paymentMethod != null ? !paymentMethod.equals(invoice.paymentMethod) : invoice.paymentMethod != null)
-            return false;
-        if (id != null ? !id.equals(invoice.id) : invoice.id != null)
-            return false;
-        if (provider != null ? !provider.equals(invoice.provider) : invoice.provider != null) return false;
-        if (buyer != null ? !buyer.equals(invoice.buyer) : invoice.buyer != null) return false;
-        if (goods != null ? !goods.equals(invoice.goods) : invoice.goods != null) return false;
-        return bruttoWords != null ? bruttoWords.equals(invoice.bruttoWords) : invoice.bruttoWords == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        result = invoiceCity != null ? invoiceCity.hashCode() : 0;
-        result = 31 * result + (invoiceDate != null ? invoiceDate.hashCode() : 0);
-        result = 31 * result + (invoiceShippingDate != null ? invoiceShippingDate.hashCode() : 0);
-        result = 31 * result + (paymentDate != null ? paymentDate.hashCode() : 0);
-        result = 31 * result + (paymentMethod != null ? paymentMethod.hashCode() : 0);
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + (provider != null ? provider.hashCode() : 0);
-        result = 31 * result + (buyer != null ? buyer.hashCode() : 0);
-        result = 31 * result + (goods != null ? goods.hashCode() : 0);
-        temp = Double.doubleToLongBits(gross);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(vat);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(netto);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (bruttoWords != null ? bruttoWords.hashCode() : 0);
-        temp = Double.doubleToLongBits(vat_0);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(vat_5);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(vat_8);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(vat_23);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(net_0);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(net_5);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(net_8);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(net_23);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(gross_0);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(gross_5);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(gross_8);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(gross_23);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
     }
 }
