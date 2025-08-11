@@ -5,6 +5,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.krakow.uek.invoiceservice.model.Invoice;
 import pl.krakow.uek.invoiceservice.service.InvoiceService;
@@ -12,8 +13,8 @@ import pl.krakow.uek.invoiceservice.service.InvoiceService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-@RestController
-@RequestMapping("/api/invoices")
+@Controller
+@RequestMapping("/api")
 public class InvoiceGeneratorController {
 
     private final InvoiceService invoiceService;
@@ -23,7 +24,7 @@ public class InvoiceGeneratorController {
         this.invoiceService = invoiceService;
     }
 
-    @PostMapping
+    @PostMapping("/invoices")
     public ResponseEntity<?> postPDFInvoice(@RequestBody Invoice invoice) {
         try {
             byte[] file = invoiceService.convertToPdf(invoice);

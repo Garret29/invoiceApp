@@ -1,12 +1,13 @@
 package pl.krakow.uek.invoiceservice;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import pl.krakow.uek.invoiceservice.model.Good;
 import pl.krakow.uek.invoiceservice.model.Invoice;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InvoiceTest {
 

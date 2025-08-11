@@ -72,7 +72,7 @@ app.controller('controller', function ($scope, $window, $http, $location) {
         };
 
     $scope.getPdfInvoice = function () {
-        let url = $scope.url + "/api/invoices";
+        let url = $scope.url + "api/invoices";
         $http.post(url, $scope.invoice, {
             responseType: 'arraybuffer', // tu
             headers: {
@@ -95,7 +95,7 @@ app.controller('controller', function ($scope, $window, $http, $location) {
     };
 
     $scope.loadFromDB = function () {
-        let url = $scope.url + "/api/keys?key=" + $scope.userId;
+        let url = $scope.url + "api/keys?key=" + $scope.userId;
         $http(
             {
                 url: url,
