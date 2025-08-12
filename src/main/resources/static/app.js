@@ -94,18 +94,6 @@ app.controller('controller', function ($scope, $window, $http, $location) {
         });
     };
 
-    $scope.loadFromDB = function () {
-        let url = $scope.url + "api/keys?key=" + $scope.userId;
-        $http(
-            {
-                url: url,
-                method: "GET"
-            }
-        ).then(function (response) {
-            $scope.invoice = response.data;
-        })
-    };
-
     $scope.addGood = function () {
         $scope.invoice.goods.push({
             name: "",
@@ -125,35 +113,8 @@ app.controller('controller', function ($scope, $window, $http, $location) {
         $scope.invoice.goods.splice(index, 1)
     };
 
-    $scope.loadBankNameFromApi = function () {
-        console.log("http://jakitobank.pl/api/?numer=PL" + $scope.invoice.provider.providerBankNumber);
-        $http({
-            method: "GET",
-            url: "http://jakitobank.pl/api/?numer=PL" + $scope.invoice.provider.providerBankNumber,
-            crossOrigin: true
-        }).then(function (response) {
-            $scope.providerBank = response.data["nazwa_banku"]
-        })
-    };
-
-    $scope.updateProviderDataFromApi = function () {
-
-        $http({
-            method: "GET",
-            url: "https://api-v3.mojepanstwo.pl/dane/krs_podmioty.json?conditions[krs_podmioty.nip]=" + $scope.invoice.provider.providerNIP
-        }).then(function (response) {
-            const json = response.data.Dataobject[0].data;
-            $scope.invoice.provider.providerApartment = json["krs_podmioty.adres_lokal"];
-            $scope.invoice.provider.providerStreet = json["krs_podmioty.adres_ulica"];
-            $scope.invoice.provider.providerCity = json["krs_podmioty.adres_miejscowosc"];
-            $scope.invoice.provider.providerName = json["krs_podmioty.nazwa"];
-            $scope.invoice.provider.providerHouse = json["krs_podmioty.adres_numer"];
-            $scope.invoice.provider.providerPostalCode = json["krs_podmioty.adres_kod_pocztowy"];
-        })
-    };
-
     this.$onInit = ()=>{
-        $scope.url =$scope.url.split('?')[0]
+        $scope.url =$scope.url.split("?")[0]
     }
 
 });
