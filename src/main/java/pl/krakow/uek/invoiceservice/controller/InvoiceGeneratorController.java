@@ -14,7 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 @Controller
-@RequestMapping("/api")
+@RequestMapping("/api/invoices")
 public class InvoiceGeneratorController {
 
     private final InvoiceService invoiceService;
@@ -24,7 +24,7 @@ public class InvoiceGeneratorController {
         this.invoiceService = invoiceService;
     }
 
-    @PostMapping("/invoices")
+    @PostMapping
     public ResponseEntity<?> postPDFInvoice(@RequestBody Invoice invoice) {
         try {
             byte[] file = invoiceService.convertToPdf(invoice);
